@@ -4,17 +4,29 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
-    private float _acceleration;
+    private float acceleration;
     [SerializeField]
-    private float _maxSpeed;
+    private float decceleration;
+    [SerializeField]
+    private float jumpVelocity;
+
+    [SerializeField]
+    private float playerGravity;
+    [SerializeField]
+    private float maxMoveSpeed;
+    [SerializeField]
+    private float maxFallSpeed;
+
+    private Vector2 _horizontalVelocity;
+    private float _verticalVelocity = -0.01f;
 
     private GameActions _gameActions;
-    private Rigidbody _rigidBody;
+    private CharacterController _characterController;
 
     public void Awake()
     {
         _gameActions = new GameActions();
-        _rigidBody = GetComponent<Rigidbody>();
+        _characterController = GetComponent<CharacterController>();
     }
 
     private void OnEnable()
@@ -29,25 +41,46 @@ public class PlayerMovement : MonoBehaviour
         _gameActions.Player.Disable();
     }
 
-    public void FixedUpdate()
+    public void Update()
     {
         Vector2 inputDirection = _gameActions.Player.PlayerMovement.ReadValue<Vector2>().normalized;
-        Debug.Log(inputDirection);
 
-        Vector3 newVelocity = _rigidBody.velocity;
-        newVelocity.x += inputDirection.x * _acceleration * Time.fixedDeltaTime;
-        newVelocity.z += inputDirection.y * _acceleration * Time.fixedDeltaTime;
+        _horizontalVelocity.x += inputDirection.x * acceleration * Time.deltaTime;
+        _horizontalVelocity.y += inputDirection.y * acceleration * Time.deltaTime;
+        _verticalVelocity -= playerGravity * Time.deltaTime;
 
-        if (newVelocity.magnitude > _maxSpeed)
+        if (_horizontalVelocity.magnitude - (decceleration * Time.deltaTime) < 0)
         {
-            newVelocity = newVelocity.normalized * _maxSpeed;
+            _horizontalVelocity = Vector2.zero;
         }
-        
-        _rigidBody.velocity = newVelocity;
+        else
+        {
+            _horizontalVelocity = _horizontalVelocity.normalized * (_horizontalVelocity.magnitude - (decceleration * Time.deltaTime));
+        }
+
+        if (_horizontalVelocity.magnitude > maxMoveSpeed)
+        {
+            _horizontalVelocity = _horizontalVelocity.normalized * maxMoveSpeed;
+        }
+
+        if (_characterController.isGrounded && _verticalVelocity < 0) _verticalVelocity = -0.01f;
+        if (_verticalVelocity < -maxFallSpeed) _verticalVelocity = -maxFallSpeed;
+
+        Vector3 velocity = new Vector3(_horizontalVelocity.x, _verticalVelocity, _horizontalVelocity.y);
+        _characterController.Move(velocity * Time.deltaTime);
+
+        if (_horizontalVelocity.magnitude > 0f)
+        {
+            Vector3 lookDirection = new Vector3(_horizontalVelocity.x, 0f, _horizontalVelocity.y);
+            transform.rotation = Quaternion.LookRotation(lookDirection);
+        }
     }
 
     private void OnJump(InputAction.CallbackContext context)
     {
-        _rigidBody.AddForce(new Vector3(0f, 300f, 0f));
+        if (_characterController.isGrounded)
+        {
+            _verticalVelocity = jumpVelocity;
+        }
     }
 }
