@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private float maxFallSpeed;
 
     private Vector2 _horizontalVelocity;
-    private float _verticalVelocity = -0.01f;
+    private float _verticalVelocity = 0;
 
     private GameActions _gameActions;
     private CharacterController _characterController;
@@ -63,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
             _horizontalVelocity = _horizontalVelocity.normalized * maxMoveSpeed;
         }
 
-        if (_characterController.isGrounded && _verticalVelocity < 0) _verticalVelocity = -0.01f;
+        if (_verticalVelocity < -3f && _characterController.isGrounded) _verticalVelocity = -3f;
         if (_verticalVelocity < -maxFallSpeed) _verticalVelocity = -maxFallSpeed;
 
         Vector3 velocity = new Vector3(_horizontalVelocity.x, _verticalVelocity, _horizontalVelocity.y);
