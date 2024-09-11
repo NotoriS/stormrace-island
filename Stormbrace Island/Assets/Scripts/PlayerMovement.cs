@@ -3,13 +3,13 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Player Speed")]
     [SerializeField]
     private float acceleration;
     [SerializeField]
     private float decceleration;
     [SerializeField]
     private float jumpVelocity;
-
     [SerializeField]
     private float playerGravity;
     [SerializeField]
@@ -23,10 +23,13 @@ public class PlayerMovement : MonoBehaviour
     private GameActions _gameActions;
     private CharacterController _characterController;
 
+    private Transform _cameraTransform;
+
     public void Awake()
     {
         _gameActions = new GameActions();
         _characterController = GetComponent<CharacterController>();
+        _cameraTransform = GameObject.Find("VirtualPlayerCamera").transform;
     }
 
     private void OnEnable()
@@ -45,8 +48,12 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 inputDirection = _gameActions.Player.PlayerMovement.ReadValue<Vector2>().normalized;
 
-        _horizontalVelocity.x += inputDirection.x * acceleration * Time.deltaTime;
-        _horizontalVelocity.y += inputDirection.y * acceleration * Time.deltaTime;
+        Vector2 camRight2D = new Vector2(_cameraTransform.right.x, _cameraTransform.right.z).normalized;
+        Vector2 camForward2D = new Vector2(_cameraTransform.forward.x, _cameraTransform.forward.z).normalized;
+        Vector2 relativeInputDirection = camRight2D * inputDirection.x + camForward2D * inputDirection.y;
+
+        _horizontalVelocity.x += relativeInputDirection.x * acceleration * Time.deltaTime;
+        _horizontalVelocity.y += relativeInputDirection.y * acceleration * Time.deltaTime;
         _verticalVelocity -= playerGravity * Time.deltaTime;
 
         if (_horizontalVelocity.magnitude - (decceleration * Time.deltaTime) < 0)
