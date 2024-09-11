@@ -158,9 +158,6 @@ MonoBehaviour:
   playerGravity: 9.81
   maxMoveSpeed: 7
   maxFallSpeed: 53
-  groundCheckRayOffset: 0
-  groundCheckRayDistance: 0
-  _verticalVelocity: 0
 --- !u!1 &1703794965783682756
 GameObject:
   m_ObjectHideFlags: 0
