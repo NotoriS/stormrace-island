@@ -111,7 +111,7 @@ Material:
     - _RippleDensity: 0.8
     - _RippleSlimness: 5
     - _RippleSpeed: 0.5
-    - _Smoothness: 0.5
+    - _Smoothness: 0.4
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
