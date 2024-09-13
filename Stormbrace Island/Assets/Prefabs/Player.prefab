@@ -156,7 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceleration: 20
   decceleration: 10
-  jumpVelocity: 5
+  jumpVelocity: 6
   playerGravity: 9.81
   maxMoveSpeed: 7
   maxFallSpeed: 53
