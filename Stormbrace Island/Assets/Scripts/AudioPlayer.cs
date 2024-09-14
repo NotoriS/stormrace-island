@@ -3,12 +3,13 @@ using UnityEngine;
 public class AudioPlayer : MonoBehaviour
 {
     private AudioSource _audioSource;
-    private float _relativeVolume;
+
+    private float RelativeVolume { get; set; }
 
     private void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
-        _relativeVolume = _audioSource.volume;
+        RelativeVolume = _audioSource.volume;
 
         AdjustVolume(AudioManager.Instance.MasterVolume);
         AudioManager.OnVolumeChange += AdjustVolume;
@@ -21,6 +22,6 @@ public class AudioPlayer : MonoBehaviour
 
     private void AdjustVolume(float masterVolume)
     {
-        _audioSource.volume = masterVolume * _relativeVolume;
+        _audioSource.volume = masterVolume * RelativeVolume;
     }
 }
