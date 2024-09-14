@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
 
     private GameActions _gameActions;
     private CharacterController _characterController;
+    private Animator _characterAnimator;
 
     private Transform _cameraTransform;
 
@@ -30,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
         _gameActions = new GameActions();
         _characterController = GetComponent<CharacterController>();
         _cameraTransform = GameObject.Find("VirtualPlayerCamera").transform;
+        _characterAnimator = GetComponentInChildren<Animator>();
     }
 
     private void OnEnable()
@@ -76,6 +78,9 @@ public class PlayerMovement : MonoBehaviour
         Vector3 velocity = new Vector3(_horizontalVelocity.x, _verticalVelocity, _horizontalVelocity.y);
         _characterController.Move(velocity * Time.deltaTime);
 
+        _characterAnimator.SetFloat("Speed", _horizontalVelocity.magnitude / maxMoveSpeed);
+        _characterAnimator.SetBool("IsGrounded", _characterController.isGrounded);
+
         if (_horizontalVelocity.magnitude > 0f)
         {
             Vector3 lookDirection = new Vector3(_horizontalVelocity.x, 0f, _horizontalVelocity.y);
@@ -88,6 +93,7 @@ public class PlayerMovement : MonoBehaviour
         if (_characterController.isGrounded)
         {
             _verticalVelocity = jumpVelocity;
+            _characterAnimator.SetTrigger("Jump");
         }
     }
 }
