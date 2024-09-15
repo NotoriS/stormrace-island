@@ -27,6 +27,11 @@ public class AudioPlayer : MonoBehaviour
 
     public void Play()
     {
+        _audioSource?.Play();
+    }
+
+    public void PlayOneShot()
+    {
         _audioSource?.PlayOneShot(_audioSource.clip);
     }
 }

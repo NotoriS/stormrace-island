@@ -131,7 +131,7 @@ public class WeatherController : MonoBehaviour
                 if (thunderSounds.Count > 0)
                 {
                     int randomIndex = Random.Range(0, thunderSounds.Count);
-                    thunderSounds[randomIndex].Play();
+                    thunderSounds[randomIndex].PlayOneShot();
                 }
                 timeUntilNextLightningStrike = Random.Range(minTimeBetweenLightningStrikes, maxTimeBetweenLightningStrikes);
             }
