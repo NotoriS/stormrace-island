@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
     {
         _gameActions.Player.Jump.performed -= OnJump;
         _gameActions.Player.Disable();
+        _characterAnimator.SetFloat("Speed", 0f);
     }
 
     public void Update()

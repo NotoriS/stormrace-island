@@ -5,6 +5,11 @@ using TMPro;
 
 public class GameTimer : MonoBehaviour
 {
+    [SerializeField]
+    private bool runClockOnStart;
+    [SerializeField]
+    private bool triggerLossOnExpiration;
+
     [Range(0, 59)]
     [SerializeField]
     private int startingClockMinutes = 10;
@@ -29,6 +34,7 @@ public class GameTimer : MonoBehaviour
 
     private void Awake()
     {
+        if (runClockOnStart) ClockRunning = true;
         StartingSeconds = startingClockMinutes * 60 + startingClockSeconds;
         SecondsRemaining = StartingSeconds;
         UpdateTimerText();
@@ -43,7 +49,7 @@ public class GameTimer : MonoBehaviour
         {
             ClockRunning = false;
             SecondsRemaining = 0f;
-            StartCoroutine(TriggerLoss());
+            if (triggerLossOnExpiration) StartCoroutine(TriggerLoss());
         }
 
         UpdateTimerText();
