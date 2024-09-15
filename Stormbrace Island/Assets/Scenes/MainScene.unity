@@ -1098,6 +1098,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6ee446d71e08674797d71c025db5eef, type: 3}
+--- !u!198 &266931166 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8915976008924376762, guid: 0a95b787f51d35c48a9554058da7f414,
+    type: 3}
+  m_PrefabInstance: {fileID: 1149626756571223966}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &271334918
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3020,7 +3026,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 605af005fc7c9df468401c051ec722e8, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
@@ -6975,12 +6981,14 @@ MonoBehaviour:
   startingIntensity: 2.2
   endingIntensity: 0.5
   sunlightSource: {fileID: 410087040}
-  rainProgressionEnabled: 0
-  rainStartTime: 0
-  startingRainRate: 0
-  endingRainRate: 0
-  startingRainSoundVolume: 0
-  endingRainSoundVolume: 0
+  rainProgressionEnabled: 1
+  rainStartTime: 0.55
+  startingRainRate: 100
+  endingRainRate: 300
+  startingRainSoundVolume: 0.5
+  endingRainSoundVolume: 1
+  rainParticleSystem: {fileID: 266931166}
+  rainAudioPlayer: {fileID: 934776166}
 --- !u!4 &1939787807
 Transform:
   m_ObjectHideFlags: 0
@@ -7829,6 +7837,11 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 1332758220}
+    - target: {fileID: 4060862438959596191, guid: 0a95b787f51d35c48a9554058da7f414,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4181065467118095110, guid: 0a95b787f51d35c48a9554058da7f414,
         type: 3}
       propertyPath: m_Name
@@ -7882,6 +7895,11 @@ PrefabInstance:
     - target: {fileID: 8302522748302909229, guid: 0a95b787f51d35c48a9554058da7f414,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8915976008924376762, guid: 0a95b787f51d35c48a9554058da7f414,
+        type: 3}
+      propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

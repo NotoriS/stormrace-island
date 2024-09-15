@@ -50,6 +50,11 @@ public class WeatherController : MonoBehaviour
     private float startingRainSoundVolume;
     [SerializeField, Range(0f, 1f)]
     private float endingRainSoundVolume;
+    [SerializeField]
+    private ParticleSystem rainParticleSystem;
+    [SerializeField]
+    private AudioPlayer rainAudioPlayer;
+    private bool _rainStarted;
 
     private GameTimer _gameTimer;
 
@@ -83,7 +88,23 @@ public class WeatherController : MonoBehaviour
 
         if (rainProgressionEnabled)
         {
-            
+            if (rainStartTime < lerpValue)
+            {
+                float timeSinceRainStarted = _gameTimer.SecondsElapsed - (rainStartTime * _gameTimer.StartingSeconds);
+                float totalRainTime = _gameTimer.StartingSeconds * (1 - rainStartTime);
+                float rainLerpValue = timeSinceRainStarted / totalRainTime;
+
+                var emission = rainParticleSystem.emission;
+                emission.rateOverTime = (int)Mathf.Lerp(startingRainRate, endingRainRate, rainLerpValue);
+                rainAudioPlayer.RelativeVolume = Mathf.Lerp(startingRainSoundVolume, endingRainSoundVolume, rainLerpValue);
+
+                if (!_rainStarted)
+                {
+                    rainParticleSystem.Play();
+                    rainAudioPlayer.Play();
+                    _rainStarted = true;
+                }
+            }
         }
     }
 }

@@ -24,4 +24,9 @@ public class AudioPlayer : MonoBehaviour
     {
         _audioSource.volume = masterVolume * RelativeVolume;
     }
+
+    public void Play()
+    {
+        _audioSource?.Play();
+    }
 }
