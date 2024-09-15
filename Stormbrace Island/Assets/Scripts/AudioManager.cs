@@ -27,4 +27,9 @@ public class AudioManager : Singleton<AudioManager>
         }
         _previousFrameMasterVolume = masterVolume;
     }
+
+    public void AdjustMasterVolume(float volume)
+    {
+        masterVolume = volume;
+    }
 }
