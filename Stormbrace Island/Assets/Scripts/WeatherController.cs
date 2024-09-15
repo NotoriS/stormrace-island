@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WeatherController : MonoBehaviour
@@ -55,8 +56,24 @@ public class WeatherController : MonoBehaviour
     private ParticleSystem rainParticleSystem;
     [SerializeField]
     private AudioPlayer rainAudioPlayer;
-    private bool _rainStarted;
-    private bool _rainVolumeFadedIn;
+    private bool _rainStarted = false;
+    private bool _rainVolumeFadedIn = false;
+
+    [Header("Thunder & Lightning")]
+    [SerializeField, Tooltip("Determines if thunder and lightning are enabled.")]
+    private bool thunderAndLightningEnabled;
+    [SerializeField, Range(0f, 1f)]
+    private float lightningStartTime;
+    [SerializeField]
+    private float minTimeBetweenLightningStrikes;
+    [SerializeField]
+    private float maxTimeBetweenLightningStrikes;
+    [SerializeField]
+    private Animator lightningAnimator;
+    [SerializeField]
+    private List<AudioPlayer> thunderSounds;
+    private float timeUntilNextLightningStrike = 0f;
+
 
     private GameTimer _gameTimer;
 
@@ -88,25 +105,37 @@ public class WeatherController : MonoBehaviour
             sunlightSource.intensity = Mathf.Lerp(startingIntensity, endingIntensity, lerpValue);
         }
 
-        if (rainProgressionEnabled)
+        if (rainProgressionEnabled && rainStartTime < lerpValue)
         {
-            if (rainStartTime < lerpValue)
+            float timeSinceRainStarted = _gameTimer.SecondsElapsed - (rainStartTime * _gameTimer.StartingSeconds);
+            float totalRainTime = _gameTimer.StartingSeconds * (1 - rainStartTime);
+            float rainLerpValue = timeSinceRainStarted / totalRainTime;
+
+            var emission = rainParticleSystem.emission;
+            emission.rateOverTime = (int)Mathf.Lerp(startingRainRate, endingRainRate, rainLerpValue);
+
+            if (_rainVolumeFadedIn) rainAudioPlayer.RelativeVolume = Mathf.Lerp(startingRainSoundVolume, endingRainSoundVolume, rainLerpValue);
+
+            if (!_rainStarted)
             {
-                float timeSinceRainStarted = _gameTimer.SecondsElapsed - (rainStartTime * _gameTimer.StartingSeconds);
-                float totalRainTime = _gameTimer.StartingSeconds * (1 - rainStartTime);
-                float rainLerpValue = timeSinceRainStarted / totalRainTime;
-
-                var emission = rainParticleSystem.emission;
-                emission.rateOverTime = (int)Mathf.Lerp(startingRainRate, endingRainRate, rainLerpValue);
-
-                if (_rainVolumeFadedIn) rainAudioPlayer.RelativeVolume = Mathf.Lerp(startingRainSoundVolume, endingRainSoundVolume, rainLerpValue);
-
-                if (!_rainStarted)
-                {
-                    StartCoroutine(StartRain());
-                    _rainStarted = true;
-                }
+                StartCoroutine(StartRain());
+                _rainStarted = true;
             }
+        }
+
+        if (thunderAndLightningEnabled && lightningStartTime < lerpValue)
+        {
+            if (timeUntilNextLightningStrike <= 0f)
+            {
+                lightningAnimator.SetTrigger("LightningFlash");
+                if (thunderSounds.Count > 0)
+                {
+                    int randomIndex = Random.Range(0, thunderSounds.Count);
+                    thunderSounds[randomIndex].Play();
+                }
+                timeUntilNextLightningStrike = Random.Range(minTimeBetweenLightningStrikes, maxTimeBetweenLightningStrikes);
+            }
+            timeUntilNextLightningStrike -= Time.deltaTime;
         }
     }
 
