@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class WeatherController : MonoBehaviour
@@ -55,6 +56,7 @@ public class WeatherController : MonoBehaviour
     [SerializeField]
     private AudioPlayer rainAudioPlayer;
     private bool _rainStarted;
+    private bool _rainVolumeFadedIn;
 
     private GameTimer _gameTimer;
 
@@ -96,15 +98,31 @@ public class WeatherController : MonoBehaviour
 
                 var emission = rainParticleSystem.emission;
                 emission.rateOverTime = (int)Mathf.Lerp(startingRainRate, endingRainRate, rainLerpValue);
-                rainAudioPlayer.RelativeVolume = Mathf.Lerp(startingRainSoundVolume, endingRainSoundVolume, rainLerpValue);
+
+                if (_rainVolumeFadedIn) rainAudioPlayer.RelativeVolume = Mathf.Lerp(startingRainSoundVolume, endingRainSoundVolume, rainLerpValue);
 
                 if (!_rainStarted)
                 {
-                    rainParticleSystem.Play();
-                    rainAudioPlayer.Play();
+                    StartCoroutine(StartRain());
                     _rainStarted = true;
                 }
             }
         }
+    }
+
+    private IEnumerator StartRain()
+    {
+        rainParticleSystem.Play();
+
+        rainAudioPlayer.RelativeVolume = 0f;
+        rainAudioPlayer.Play();
+
+        for (float volume = 0f; volume <= startingRainSoundVolume; volume += 0.01f)
+        {
+            rainAudioPlayer.RelativeVolume = volume;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        _rainVolumeFadedIn = true;
     }
 }

@@ -2326,8 +2326,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b008773b25673e74da1400519974f926, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingClockMinutes: 2
-  startingClockSeconds: 0
+  startingClockMinutes: 0
+  startingClockSeconds: 30
   timerText: {fileID: 458954266}
 --- !u!4 &659775819
 Transform:
@@ -3517,7 +3517,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   persistent: 1
-  masterVolume: 0.099
+  masterVolume: 0.5
 --- !u!4 &1119481657
 Transform:
   m_ObjectHideFlags: 0
