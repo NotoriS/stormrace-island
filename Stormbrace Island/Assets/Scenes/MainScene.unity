@@ -1434,7 +1434,7 @@ GameObject:
   - component: {fileID: 410087040}
   - component: {fileID: 410087042}
   m_Layer: 0
-  m_Name: Directional Light
+  m_Name: Sunlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2320,7 +2320,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b008773b25673e74da1400519974f926, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingClockMinutes: 1
+  startingClockMinutes: 2
   startingClockSeconds: 0
   timerText: {fileID: 458954266}
 --- !u!4 &659775819
@@ -6969,11 +6969,12 @@ MonoBehaviour:
   endingWaveSoundVolume: 0.35
   waterRenderer: {fileID: 1590075510}
   waterAudioPlayer: {fileID: 1245533629}
-  sunlightProgressionEnabled: 0
-  startingTemperature: 0
-  endingTemperature: 0
-  startingIntensity: 0
-  endingIntensity: 0
+  sunlightProgressionEnabled: 1
+  startingTemperature: 4000
+  endingTemperature: 14000
+  startingIntensity: 2.2
+  endingIntensity: 0.5
+  sunlightSource: {fileID: 410087040}
   rainProgressionEnabled: 0
   rainStartTime: 0
   startingRainRate: 0

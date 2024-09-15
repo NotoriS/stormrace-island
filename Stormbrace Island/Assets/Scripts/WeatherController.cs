@@ -27,13 +27,15 @@ public class WeatherController : MonoBehaviour
     [SerializeField, Tooltip("Determines if this controller will effect the sunlight.")]
     private bool sunlightProgressionEnabled;
     [SerializeField]
-    private int startingTemperature;
+    private float startingTemperature;
     [SerializeField]
-    private int endingTemperature;
+    private float endingTemperature;
     [SerializeField]
     private float startingIntensity;
     [SerializeField]
     private float endingIntensity;
+    [SerializeField]
+    private Light sunlightSource;
 
     [Header("Rain")]
     [SerializeField, Tooltip("Determines if this controller will effect the rain.")]
@@ -75,7 +77,8 @@ public class WeatherController : MonoBehaviour
 
         if (sunlightProgressionEnabled)
         {
-            
+            sunlightSource.colorTemperature = Mathf.Lerp(startingTemperature, endingTemperature, lerpValue);
+            sunlightSource.intensity = Mathf.Lerp(startingIntensity, endingIntensity, lerpValue);
         }
 
         if (rainProgressionEnabled)
