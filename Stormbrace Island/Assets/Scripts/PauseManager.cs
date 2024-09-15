@@ -22,11 +22,6 @@ public class PauseManager : MonoBehaviour
         volumeSlider.onValueChanged.AddListener(AudioManager.Instance.AdjustMasterVolume);
     }
 
-    private void OnDestroy()
-    {
-        volumeSlider.onValueChanged.RemoveListener(AudioManager.Instance.AdjustMasterVolume);
-    }
-
     private void OnEnable()
     {
         _gameActions.Menu.Enable();

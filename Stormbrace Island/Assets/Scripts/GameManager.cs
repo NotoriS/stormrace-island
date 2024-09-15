@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(textTime);
         startText.SetActive(false);
         playerMovement.enabled = true;
+        FindFirstObjectByType<GameTimer>().ClockRunning = true;
         yield return new WaitForSeconds(timeBetweenText);
 
         movementTutorialText.SetActive(true);

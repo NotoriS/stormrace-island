@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameTimer : MonoBehaviour
@@ -12,6 +14,10 @@ public class GameTimer : MonoBehaviour
 
     [SerializeField]
     private TextMeshProUGUI timerText;
+    [SerializeField]
+    private GameObject lossText;
+    [SerializeField]
+    private PlayerMovement playerMovement;
 
     public bool ClockRunning { get; set; }
 
@@ -30,10 +36,15 @@ public class GameTimer : MonoBehaviour
 
     private void Update()
     {
-        //if (!ClockRunning) return;
+        if (!ClockRunning) return;
 
         SecondsRemaining -= Time.deltaTime;
-        if (SecondsRemaining < 0f) SecondsRemaining = 0f;
+        if (SecondsRemaining < 0f)
+        {
+            ClockRunning = false;
+            SecondsRemaining = 0f;
+            StartCoroutine(TriggerLoss());
+        }
 
         UpdateTimerText();
     }
@@ -51,5 +62,19 @@ public class GameTimer : MonoBehaviour
         }
 
         timerText.text = $"{MinutesOnClock}:{secondText}";
+    }
+
+    public void RemoveTime(float seconds)
+    {
+        SecondsRemaining -= seconds;
+        if (SecondsRemaining < 0f) SecondsRemaining = 0f;
+    }
+
+    private IEnumerator TriggerLoss()
+    {
+        lossText.SetActive(true);
+        playerMovement.enabled = false;
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadScene("MainMenu");
     }
 }
