@@ -1,18 +1,86 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WeatherController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("Waves")]
+    [SerializeField, Tooltip("Determines if this controller will effect the waves.")]
+    private bool wavesProgressionEnabled;
+    [SerializeField]
+    private float startingWaveSpeed;
+    [SerializeField]
+    private float endingWaveSpeed;
+    [SerializeField]
+    private float startingWaveHeight;
+    [SerializeField]
+    private float endingWaveHeight;
+    [SerializeField, Range(0f, 1f)]
+    private float startingWaveSoundVolume;
+    [SerializeField, Range(0f, 1f)]
+    private float endingWaveSoundVolume;
+    [SerializeField]
+    private MeshRenderer waterRenderer;
+    private Material _waterMaterial;
+    [SerializeField]
+    private AudioPlayer waterAudioPlayer;
+
+    [Header("Sunlight")]
+    [SerializeField, Tooltip("Determines if this controller will effect the sunlight.")]
+    private bool sunlightProgressionEnabled;
+    [SerializeField]
+    private int startingTemperature;
+    [SerializeField]
+    private int endingTemperature;
+    [SerializeField]
+    private float startingIntensity;
+    [SerializeField]
+    private float endingIntensity;
+
+    [Header("Rain")]
+    [SerializeField, Tooltip("Determines if this controller will effect the rain.")]
+    private bool rainProgressionEnabled;
+    [SerializeField, Range(0f, 1f)]
+    private float rainStartTime;
+    [SerializeField]
+    private int startingRainRate;
+    [SerializeField]
+    private int endingRainRate;
+    [SerializeField, Range(0f, 1f)]
+    private float startingRainSoundVolume;
+    [SerializeField, Range(0f, 1f)]
+    private float endingRainSoundVolume;
+
+    private GameTimer _gameTimer;
+
+    private void Awake()
     {
-        
+        _gameTimer = FindAnyObjectByType<GameTimer>();
+        _waterMaterial = waterRenderer.material;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        UpdateWeatherEffects();
+    }
+
+    private void UpdateWeatherEffects()
+    {
+        float lerpValue = _gameTimer.SecondsElapsed / _gameTimer.StartingSeconds;
+
+        if (wavesProgressionEnabled)
+        {
+            _waterMaterial.SetFloat("_WaveSpeed", Mathf.Lerp(startingWaveSpeed, endingWaveSpeed, lerpValue));
+            _waterMaterial.SetFloat("_WaveHeight", Mathf.Lerp(startingWaveHeight, endingWaveHeight, lerpValue));
+            waterAudioPlayer.RelativeVolume = Mathf.Lerp(startingWaveSoundVolume, endingWaveSoundVolume, lerpValue);
+        }
+
+        if (sunlightProgressionEnabled)
+        {
+            
+        }
+
+        if (rainProgressionEnabled)
+        {
+            
+        }
     }
 }

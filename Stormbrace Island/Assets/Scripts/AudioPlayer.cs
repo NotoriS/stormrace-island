@@ -4,7 +4,7 @@ public class AudioPlayer : MonoBehaviour
 {
     private AudioSource _audioSource;
 
-    private float RelativeVolume { get; set; }
+    public float RelativeVolume { get; set; }
 
     private void Awake()
     {
